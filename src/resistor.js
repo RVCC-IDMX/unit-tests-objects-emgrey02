@@ -60,7 +60,19 @@
  * then use the copied object like a lookup table
  */
 function getColorValue(color) {
-  // write your code here & return value
+  const colorCodes = {
+    black: 0,
+    brown: 1,
+    red: 2,
+    orange: 3,
+    yellow: 4,
+    green: 5,
+    blue: 6,
+    violet: 7,
+    grey: 8,
+    white: 9,
+  };
+  return colorCodes[color];
 }
 
 /**
@@ -77,7 +89,21 @@ function getColorValue(color) {
  * then use the copied object like a lookup table
  */
 function getMultiplierValue(color) {
-  // write your code here & return value
+  const multiplierCodes = {
+    black: 1,
+    brown: 10,
+    red: 100,
+    orange: 1000,
+    yellow: 10000,
+    green: 100000,
+    blue: 1000000,
+    violet: 10000000,
+    grey: 100000000,
+    white: 1000000000,
+    gold: 0.1,
+    silver: 0.01,
+  };
+  return multiplierCodes[color];
 }
 
 /**
@@ -104,7 +130,17 @@ function getMultiplierValue(color) {
  *
  */
 function getThreeBandValue(bands) {
-  // write your code here & return value
+  const first = getColorValue(bands.color1).toString();
+  const second = getColorValue(bands.color2).toString();
+  const together = +(first + second);
+  const total = together * getMultiplierValue(bands.multiplier);
+  if (bands.multiplier === 'gold') {
+    return +total.toFixed(1);
+  }
+  if (bands.multiplier === 'silver') {
+    return +total.toFixed(2);
+  }
+  return total;
 }
 
 /**
@@ -127,7 +163,22 @@ function getThreeBandValue(bands) {
  *
  */
 function formatNumber(val) {
-  // write your code here & return value
+  const valString = val.toString();
+  const valLength = valString.length;
+
+  if (valLength <= 3) {
+    return valString;
+  }
+  if (valLength > 3 && valLength <= 6) {
+    return `${(val / 1000).toString()}k`;
+  }
+  if (valLength > 6 && valLength <= 9) {
+    return `${(val / 1000000).toString()}M`;
+  }
+  if (valLength > 9 && valLength <= 12) {
+    return `${(val / 1000000000).toString()}G`;
+  }
+  return undefined;
 }
 
 /**
@@ -146,7 +197,17 @@ function formatNumber(val) {
  * example: 'green' => '±0.5%'
  */
 function getTolerance(color) {
-  // write your code here & return value
+  const colorTolerance = {
+    brown: '±1%',
+    red: '±2%',
+    green: '±0.5%',
+    blue: '±0.25%',
+    violet: '±0.1%',
+    grey: '±0.05%',
+    gold: '±5%',
+    silver: '±10%',
+  };
+  return colorTolerance[color];
 }
 
 /**
@@ -178,7 +239,10 @@ function getTolerance(color) {
  * must use functions in this file to build the string using a template literal
  */
 function getResistorOhms(bands) {
-  // write your code here & return value
+  const resistorValue = formatNumber(getThreeBandValue(bands));
+  return `Resistor value: ${resistorValue} Ohms ${getTolerance(
+    bands.tolerance
+  )}`;
 }
 
 module.exports = {
